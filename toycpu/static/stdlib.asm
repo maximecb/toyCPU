@@ -229,6 +229,33 @@ bus_read r0
 ret 1
 
 ;***************************************************************************
+; Clock device handling
+;***************************************************************************
+
+; @function Get the current time in milliseconds. This produces a 32-bit
+; value represented as two 16-bit words.
+; @arg pointer to the location at which to store the time value
+CLOCK_TIME_MS:
+push r0
+push r1
+; r0 = dst pointer
+load rsp, 3, r0
+; Request the time value
+bus_write 2
+bus_write 0
+; Read the time value
+bus_read r1
+store r0, 0, r1
+bus_read r1
+store r0, 1, r1
+; Exit
+pop r1
+pop r0
+ret 1
+
+; TODO: CLOCK_MS_ELAPSED
+
+;***************************************************************************
 ; Character string utility functions
 ;***************************************************************************
 

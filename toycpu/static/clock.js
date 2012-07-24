@@ -38,5 +38,45 @@
 *
 *****************************************************************************/
 
-// TODO: clock peripheral implementation
+/**
+@class Clock peripheral device
+*/
+function ClockDevice()
+{
+}
+
+/**
+Initialize the clock device
+*/
+ClockDevice.prototype.init = function ()
+{
+}
+
+/**
+Handler to get the time since bootup in milliseconds. 
+Returns a 32-bit value as two 16-bit words.
+*/
+ClockDevice.prototype.getTimeMS = function (args, output)
+{
+    var timeMS = getTimeMillis();
+
+    var lWord = timeMS & 0xFFFF;
+    var hWord = (timeMS >> 16) & 0xFFFF;
+
+    output.push(lWord);
+    output.push(hWord);
+}
+
+/**
+Message table
+*/
+ClockDevice.prototype.msgTable = (function ()
+{
+    var msgTable = [];
+
+    // Time in milliseconds handler
+    msgTable[0] = { numArgs: 0, handler: ClockDevice.prototype.getTimeMS };
+
+    return msgTable;
+})();
 

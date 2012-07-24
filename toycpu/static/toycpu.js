@@ -151,7 +151,8 @@ var toyCPU = (function ()
 
         // Create the peripheral devices
         vm.addDevice(new VideoDevice(canvas), 0);
-        vm.addDevice(new KeyboardDevice(), 1);
+        vm.addDevice(new KeyboardDevice()   , 1);
+        vm.addDevice(new ClockDevice()      , 2);
 
         // Initialize the manual
         initManual();
