@@ -1,0 +1,30 @@
+/* Make the editor fill the parent element's height */
+.CodeMirror-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 100%;
+  position: relative;
+  outline: none;
+}
+
+/* customized editor font */
+.cm-s-asm { font:13px/1.4em Trebuchet, Verdana, sans-serif; }
+
+.cm-s-asm { background: #112435; color: white; }
+.cm-s-asm div.CodeMirror-selected { background: #38566F !important; }
+.cm-s-asm .CodeMirror-gutter { background: #1F4661; border-right: 4px solid #3E7087; min-width:2em; }
+.cm-s-asm .CodeMirror-gutter-text { color: white; }
+.cm-s-asm .CodeMirror-cursor { border-left: 1px solid white !important; }
+
+/* code highlighting */
+.cm-s-asm span.cm-LABEL { color: #0066FF; }
+.cm-s-asm span.cm-COMMA { color: #FFF; }
+.cm-s-asm span.cm-COMMENT { color: #0F0; font-style:italic; }
+.cm-s-asm span.cm-NUMBER { color: #FF9900; }
+.cm-s-asm span.cm-STRING { color: #FF00FF; }
+.cm-s-asm span.cm-IDENT { color: #0066FF; }
+.cm-s-asm span.cm-COMMAND { color: #FF0; }
+.cm-s-asm span.cm-REGNAME { color: #6699FF; }
+.cm-s-asm span.cm-INSTR { color: #FFFFFF; }
+.cm-s-asm span.cm-ERROR { color: #F00; }
+

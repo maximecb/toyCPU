@@ -1,0 +1,268 @@
+<html>
+  <head>
+    <title>toyCPU</title>
+
+    <meta name="keywords" content="programming, assembly, processor, cpu, emulator, teaching, html5, javascript">
+    <link rel=stylesheet href="stylesheet.css" type="text/css">
+    <script language="javascript" src="utils-misc.js"></script>
+    <script language="javascript" src="utils-html.js"></script>
+    <script language="javascript" src="canvas.js"></script>
+    <script language="javascript" src="assembler.js"></script>
+    <script language="javascript" src="vm.js"></script>
+    <script language="javascript" src="video.js"></script>
+    <script language="javascript" src="keyboard.js"></script>
+    <script language="javascript" src="clock.js"></script>
+    <script language="javascript" src="stdlib.js"></script>
+    <script language="javascript" src="font.js"></script>
+    <script language="javascript" src="toycpu.js"></script>
+    <script language="javascript" src="layout.js"></script>
+
+    <script src="codemirror.js"></script>
+    <script src="cm-asm.js"></script>
+    <link rel="stylesheet" href="codemirror.css">
+    <link rel="stylesheet" href="cm-asm.css">
+
+  </head>
+  <body>
+
+    <div id="page-container">
+      <div id="menu-container">
+        <div id="menu-bar">
+          <div class="title">toyCPU</div>
+        </div>
+      </div>
+      <!-- Tabs are inserted here -->
+    </div>
+
+    <!-- ASM code editor module -->
+    <div class="module-content" data-name="ASM Code Editor">
+      <!-- Code editor -->
+      <div id="code-editor"></div>
+    </div>
+
+    <!-- Graphical display module -->
+    <div class="module-content" data-name="Graphical Display">
+      <canvas id="screen-canvas" width=512 height=384>
+      Your browser does not support the canvas element.
+      </canvas>
+    </div>
+
+    <!-- Executon control module -->
+    <div class="module-content" data-name="Execution Control">
+
+      <form id="clock-control">
+        <fieldset id="clock-speed">
+          <legend>Clock speed</legend>
+          <input onchange="toyCPU.setClockSpeed()" type="radio" name="clock" value="0">Manual
+          <button id="clock_step" onclick="toyCPU.updateVM()" type="button" disabled>Clock Step</button>
+          <input onchange="toyCPU.setClockSpeed()" type="radio" name="clock" value="1">1Hz
+          <input onchange="toyCPU.setClockSpeed()" type="radio" name="clock" value="10">10Hz
+          <input onchange="toyCPU.setClockSpeed()" type="radio" name="clock" value="1000">1KHz
+          <input onchange="toyCPU.setClockSpeed()" type="radio" name="clock" value="50000">50KHz
+          <input onchange="toyCPU.setClockSpeed()" type="radio" name="clock" value="Infinity" checked>Warp 9
+        </fieldset>
+      </form>
+
+      <div class="valbar">
+        <div class="valwrap">Effective speed (Hz)&nbsp;<div id="vm_speed" class="valbox">0</div></div>
+        <div class="valwrap">Cycle count&nbsp;<div id="cycle_count" class="valbox">0</div></div>       
+      </div>
+
+      <div class="button-bar">
+        <button id="button-run" onclick="toyCPU.compileAndRun()">Compile & Run</button>
+        <button id="button-stop" onclick="toyCPU.stopProgram()" disabled>Stop Program</button>
+        <button id="button-resume" onclick="toyCPU.resumeProgram()" disabled>Resume Program</button>
+      </div>
+
+    </div>
+
+    <!-- Register view module -->
+    <div class="module-content" data-name="Register View">
+      <div id="registers">
+      <div class="regwrap">r0&nbsp;&nbsp;<div id="r0" class="regbox">00000</div></div>
+      <div class="regwrap">r1&nbsp;&nbsp;<div id="r1" class="regbox">00000</div></div>
+      <div class="regwrap">r2&nbsp;&nbsp;<div id="r2" class="regbox">00000</div></div>
+      <div class="regwrap">r3&nbsp;&nbsp;<div id="r3" class="regbox">00000</div></div>
+
+      <div class="regwrap">r4&nbsp;&nbsp;<div id="r4" class="regbox">00000</div></div>
+      <div class="regwrap">r5&nbsp;&nbsp;<div id="r5" class="regbox">00000</div></div>
+      <div class="regwrap">r6&nbsp;&nbsp;<div id="r6" class="regbox">00000</div></div>
+      <div class="regwrap">r7&nbsp;&nbsp;<div id="r7" class="regbox">00000</div></div>
+
+      <div class="regwrap">r8&nbsp;&nbsp;<div id="r8" class="regbox">00000</div></div>
+      <div class="regwrap">r9&nbsp;&nbsp;<div id="r9" class="regbox">00000</div></div>
+      <div class="regwrap">r10&nbsp;<div id="r10" class="regbox">00000</div></div>
+      <div class="regwrap">r11&nbsp;<div id="r11" class="regbox">00000</div></div>
+
+      <div class="regwrap">rfl&nbsp;<div id="rfl" class="regbox">00000</div></div>
+      <div class="regwrap">rsp&nbsp;<div id="rsp" class="regbox">00000</div></div>
+      <div class="regwrap">rip&nbsp;<div id="rip" class="regbox">00000</div></div>
+      </div>
+    </div>
+
+    <!-- Stack view module -->
+    <div class="module-content" data-name="Stack View">
+      <table id="stack-table">
+        <tr>
+          <th></th><th>Address</th><th>Decimal</th><th>Hex</th><th>Binary</th>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Program tab -->
+    <div class="tab-frame-clear" data-name="Write Code">
+      <div id="module-container"></div>
+    </div>
+
+    <!-- Share tab -->
+    <div class="tab-frame" data-name="Save Program">
+      <div class="tab-title">Save Your Program</div>
+      <p>Share your program online</p>
+    </div>
+
+    <!-- Browse tab -->
+    <div class="tab-frame" data-name="Browse Programs">
+      <div class="tab-title">Browse User-Created Programs</div>
+      <p>Browse user-created programs</p>
+    </div>
+
+    <!-- Manual tab -->
+    <div class="tab-frame" data-name="Manual" id="manual-tab">
+      <div class="tab-title">Read The Lovely Manual (RTLM)</div>
+
+      <!-- Auto-generated manual contents -->
+      <div id="manual_contents">
+      <h1>Contents</h1>
+      </div>
+
+      <h1>Introduction</h1>
+      <p>
+      toyCPU is a simulated computed created to teaching the basics of assembly
+      programming and computer architecture. It is meant to provide a gentle but
+      in depth introduction to programming and computer science. Our hope is
+      that working with toyCPU will help you take away the veil of mystery
+      surrounding computers and develop a basic yet accurate mental model of
+      their internal workings. Once you've mastered toyCPU, you should be
+      well-positioned to understand any programming language you might wish
+      to learn.
+      </p>
+
+      <h1>The toyCPU Architecture</h1>
+      <p>
+      toyCPU is a simplified computer architecture inspired from "retro"
+      personal computers of the early 1980s. It strives to reach a balance
+      between minimalism and realism. The CPU emulated by toyCPU is based on
+      RISC (Reduced Instruction Set Computing) notions. It features 16-bit
+      registers and a small instruction set.
+      </p>
+
+      <h2>CPU Registers</h2>
+      <p>
+      The toyCPU architecture includes 12 general-purpose registers and 3
+      special registers. All registers are 16-bits wide.
+      </p>
+
+      <h2>Instruction Listing</h2> 
+      <!-- Auto-generated instruction listing -->
+      <span id="instr_listing"></span>
+
+      <h2>Memory Layout</h2>
+
+      <h2>Peripheral devices</h2>
+
+      <h1>Using toyCPU</h1>
+
+      <h2>Writing Programs</h2>
+
+      <h2>Running your Programs</h2>
+
+      <h2>Saving Programs Online</h2>
+
+      <h1>The Standard Library</h1>
+      <p>
+      The standard library is code that comes bundled with toyCPU. This code contains
+      functions and definitions intended to make your programming work easier. Provided
+      are functions to perform text input/output and to draw graphics.
+      </p>
+
+      <h2>Calling Convention</h2>
+      <p>
+      Library functions use a simple calling convention where arguments are pushed on
+      the stack in normal order and values are returned in the r0 register. The callee
+      function saves and restores all registers it needs to operate and pops its arguments
+      off the stack. Library functions that return no value will save and restore the r0
+      register as well. This calling convention is meant to minimize the work needed on
+      the part of the caller and make the library functions as user-friendly as possible.
+      </p>
+
+      <h2>Library Code Listing</h2>
+      <!-- Library code listing -->
+      <div id="lib-code-wrap">
+        <div id="lib-code"></div>
+      </div>
+
+      <p>
+      You can browse the standard library source code in the above view. This code
+      is not editable, but is provided for reference purpose.
+      </p>
+
+      <h1>Frequently Asked Questions (FAQ)</h1>
+      <div class="faq_q">Why is toyCPU a 16-bit machine? Why not 8-bit or 32-bit?</div>
+      <p>
+      Using 16-bit registers has advantages over alternatives. It allows storing large
+      enough numerical values for most computations and permits direct addressing of a
+      64K word memory space. Limiting ourself to 8-bit values would have meant being
+      forced to use more complex memory addressing schemes and would have complicated
+      arithmetic operations for most nontrivial programs. Restricting ourself to 16-bit
+      values means that the values in registers remain small enough to comfortably print
+      them out in binary format if needed, while keeping the memory space small enough
+      to allow for visual inspection.
+      </p>
+
+      <div class="faq_q">Why design your own assembly language? Why not use 6502/Z80/8080/DCPU-16 assembly?</div>
+      <p>
+      Assembly languages used by real microprocessors, particularly those designed in the 1970s and 1980s, impose many
+      restrictions that are based purely on what was cheapest and most efficient to do in hardware. These restrictions
+      mean that many unnecessary complications arise that would make the teaching of these languages to beginners more
+      difficult.
+      </p>
+      <p>
+      Since our goal is to teach programming, and not to precisely emulate a specific vintage computer, we have designed
+      a streamlined language which aims to strip away arbitrary design constraints while presenting a good approximation of the
+      features found in most real-world assembly languages.
+      </p>
+
+      <div class="faq_q">Does toyCPU support self-modifying code?</div>
+      <p>
+      Yes, absolutely. Just like on a real machine, it's possible for code running in toyCPU to generate new code or even
+      rewrite itself on-the-fly. No special instructions are necessary for this.
+      </p>
+
+      <h1>Credits</h1>
+      <p>
+      Maxime Chevalier-Boisvert: toyCPU project initiator.
+      </p>
+    </div>
+
+    <!-- Google ad -->
+    <div class="ad">
+        <script type="text/javascript"><!--
+        google_ad_client = "pub-3290005680781787";
+        /* Gradient */
+        google_ad_slot = "3944090217";
+        google_ad_width = 468;
+        google_ad_height = 60;
+        //-->
+        </script>
+        <script type="text/javascript"
+        src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+        </script>
+    </div>
+
+    <div class="copyright">
+    Copyright &copy; 2012 Maxime Chevalier-Boisvert
+    </div>
+
+  </body>
+</html>
+

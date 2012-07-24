@@ -1,0 +1,488 @@
+body
+{
+    margin: 0;
+    padding: 0;
+    background: #000000;
+    color: white;
+    font-family: verdana, arial, sans-serif;
+    font-weight: normal;
+    font-size: 14px;
+}
+
+#page-container
+{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*****************************************************************************
+* Top menu bar
+*****************************************************************************/
+
+#menu-container
+{
+    border: 3px solid #303030;
+    background: #090909;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    text-align: left;
+}
+
+#menu-bar
+{
+    display: table;
+    text-align: left;
+
+    /* Make the menu bar contents non-selectable */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+div.title
+{
+    display: table-cell;
+    vertical-align: middle;
+
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 8px;
+    padding-right: 10px;
+
+    color: white;
+    font-family: "Arial", sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+div.menu-button
+{
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 14px;
+}
+div.menu-button:hover 
+{
+    color: red;
+}
+div.menu-button-on
+{
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: red;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/*****************************************************************************
+* Tab frame system
+*****************************************************************************/
+
+div.tab-frame-clear
+{
+    display: block;
+    text-align: center;
+}
+
+div.tab-frame
+{
+    display: block;
+    border: 3px solid #303030;
+    background: #090909;
+    text-align: center;
+}
+
+div.tab-title
+{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/*****************************************************************************
+* Modular GUI system
+*****************************************************************************/
+
+#module-container
+{
+    width: 100%;
+}
+
+div.module-table
+{
+    display: table;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.module-table-row
+{
+    display: table-row;
+}
+
+div.module-table-column
+{
+    display: table-cell;
+    vertical-align: top;
+}
+
+div.module-ghost
+{
+    background: #303030;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+div.module
+{
+    border: 1px #5A5A5A solid;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    background: #090909;
+}
+
+div.module-title
+{
+    display: table;
+    width: 100%;
+    background: #303030;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 3px;
+    padding-right: 2px;
+
+    /* Make the title bar contents non-selectable */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+div.module-title-row
+{
+    display: table-row;
+    width: 100%;
+}
+
+div.module-title-left
+{
+    display: table-cell;
+    text-align: left;
+    width: auto;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+div.module-title-right
+{
+    display: table-cell;
+    text-align: right;
+    width: 35px;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+div.module-title-button
+{
+    display: inline;
+}
+
+div.module-content
+{
+    display: block;
+    height: 100%;
+    text-align: center;
+}
+
+/*****************************************************************************
+* Code editor module 
+*****************************************************************************/
+
+#code-editor
+{
+    height: 420px;
+    display: block;
+
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: 8px;
+    margin-right: 8px;
+    border: 1px solid rgb(150,150,150);
+
+    text-align: left;
+}
+
+/*****************************************************************************
+* Execution control module
+*****************************************************************************/
+
+#clock-control
+{
+    margin-top: 8px;
+    margin-bottom: 8px;
+    color: white;
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+}
+#clock-control fieldset
+{
+    margin-left: 20px;
+    margin-right: 20px;
+    text-align: center;
+}
+#clock-control legend
+{
+    text-align: left;
+    font-size: 14px;
+}
+
+div.valbar
+{
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+div.valwrap
+{
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+div.valbox
+{
+    display: inline;
+
+    border: 1px solid rgb(80, 80, 80);
+    background: rgb(20, 20, 20);
+
+    text-align: right;
+    font-family: monospace;
+    font-size: 14px;
+}
+
+/*****************************************************************************
+* Register view module 
+*****************************************************************************/
+
+#stack
+{
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+#registers
+{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+
+    text-align: center;
+    font-family: monospace;   
+}
+
+div.regwrap
+{
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+div.regbox
+{
+    display: inline;
+
+    border: 1px solid rgb(80, 80, 80);
+    background: rgb(20, 20, 20);
+
+    text-align: right;
+    font-family: monospace;
+    font-size: 14px;
+}
+
+/*****************************************************************************
+* Stack view module 
+*****************************************************************************/
+
+#stack-table
+{
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    border-spacing: 4px 1px;
+}
+#stack-table th
+{
+    padding-bottom: 5px;
+    font-family: verdana;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: center;
+}
+#stack-table td.addr
+{
+    text-align: right;
+    font-family: monospace;
+}
+#stack-table td.val
+{
+    border: 1px solid rgb(80, 80, 80);
+    background: black;
+    text-align: right;
+    font-family: monospace;
+}
+
+/*****************************************************************************
+* Graphical output module
+*****************************************************************************/
+
+#screen-canvas
+{
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 14px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid rgb(255,255,255);
+    background: #000000;
+}
+
+/*****************************************************************************
+* Manual
+*****************************************************************************/
+
+/* Manual contents element */
+div.manual_listing
+{
+    margin-left: 10px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    text-align: left;
+    font-size: 14px;
+}
+
+#lib-code-wrap
+{
+    max-width: 700px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+#lib-code
+{
+    height: 400px;
+    width: 100%;
+    border: 1px solid rgb(150,150,150);
+    text-align: left;
+}
+
+div.faq_q
+{
+    margin-top: 10px;
+    margin-bottom: 8px;
+    margin-left:10px;
+    margin-right:10px;
+
+    text-align:left;
+    color: red;
+    font-family: "Arial", sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+/*****************************************************************************
+* Misc page elements
+*****************************************************************************/
+
+/* Links */
+a
+{
+    color: #3083D6;
+    font-family: "Arial", sans-serif;
+}
+a:link {text-decoration: none; }
+a:visited {text-decoration: none; }
+a:active {text-decoration: none; }
+a:hover {text-decoration: underline; }
+
+div.button-bar
+{
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+/* Heading tags */
+h1
+{
+    margin: 10px;
+    text-align: left;
+    font-size: 24px;
+}
+h2
+{
+    margin: 10px;
+    text-align: left;
+    font-size: 18px;
+}
+h3
+{
+    margin: 10px;
+    text-align: left;
+    font-size: 15px;
+}
+
+p
+{
+    margin: 10px;
+    border: 0px;
+    padding: 0px;
+    text-align: justify;
+    font-size: 14px;
+}
+
+div.ad
+{
+    width:100%;
+    margin-top: 12px; 
+    margin-bottom: 12px;
+
+    text-align:center; 
+}
+
+div.copyright
+{
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: auto;
+    margin-right: auto;
+
+    text-align: center;
+    color: white;
+    font-family: "Arial", sans-serif;
+    font-weight: normal;
+    font-size: 15px;
+}
+
