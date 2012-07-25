@@ -3,14 +3,24 @@
 
 module("Basic");
 
-test("Environment is good",function()
+test("Environment is good", function()
 {
-    expect(2);
-    ok(VM,"VM loaded");
+    expect(3);
+    ok(VM, "VM loaded");
     ok(FONT_DATA, "Font loaded");
+    ok(STDLIB_SRC, "Stdlib loaded");
 });
 
-test("Not in bizzaro-world",function()
+module("VM");
+
+
+
+
+
+
+
+/*
+test("Not in bizzaro-world", function()
 {
     expect(1);
     equal(1, 1, "OK");
@@ -18,10 +28,10 @@ test("Not in bizzaro-world",function()
 
 module("Fail Example");
 
-test("This should fail",function()
+test("This should fail", function()
 {
     expect(1);
     equal(2,3,"2 is 3");
 });
-
+*/
 

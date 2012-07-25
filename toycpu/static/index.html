@@ -171,6 +171,20 @@
       <span id="instr_listing"></span>
 
       <h2>Memory Layout</h2>
+      <p>
+      The main memory (RAM or Random Access Memory) of toyCPU contains 65536
+      (2 to the 16th power) words of 16 bits (two bytes) each. Each word of
+      memory is essentially a slot into which numerical values can be read or
+      written. This memory is distinct from the CPU registers and is accessed
+      using the load and store instructions.
+      </p>
+      <p>
+      When a program is compiled, its machine code is written starting at
+      address 0. When toyCPU is initialized, the instruction pointer (rip
+      register) is set to point to this address to begin execution. Essentially,
+      executable code is written at the bottom of the memory space, and the
+      stack grows downwards from the top of the memory.
+      </p>
 
       <h2>Peripheral devices</h2>
 
@@ -244,8 +258,13 @@
 
       <h1>Credits</h1>
       <p>
-      Maxime Chevalier-Boisvert: toyCPU project initiator.
+      <b>Maxime Chevalier-Boisvert</b>: project initiator, programming.
       </p>
+
+      <p>
+      <b>Tom "thejsjunky"</b>: JavaScript and assembly programming.
+      </p>
+
     </div>
 
     <!-- Google ad -->
