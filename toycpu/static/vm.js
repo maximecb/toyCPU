@@ -146,7 +146,7 @@ var regNames = [
     'r11',
 
     // Special registers
-    'r??',
+    'rex',
     'rfl',
     'rsp',
     'rip',      
@@ -299,6 +299,7 @@ VM.prototype.run = function (maxCycles)
 
     var ripIndex = regIndices.rip;
     var rspIndex = regIndices.rsp;
+    var rexIndex = regIndices.rex;
 
     var regs = this.regs;
     var ram = this.ram;
@@ -414,27 +415,42 @@ VM.prototype.run = function (maxCycles)
             // Signed integer add
             case instrTable.add.opCode:
             {
-                var i0 = readInput(0);
-                var i1 = readInput(1);
-                setReg(2, i0 + i1);
+                var i0 = readInput(0) & 0xFFFF;
+                var i1 = readInput(1) & 0xFFFF;
+
+                var r = i0 + i1;
+                var rH = r >> 16;
+
+                setReg(2, r);
+                regs[rexIndex] = rH;
             }
             break;
 
             // Signed integer subtract
             case instrTable.sub.opCode:
             {
-                var i0 = readInput(0);
-                var i1 = readInput(1);
-                setReg(2, i0 - i1);
+                var i0 = readInput(0) & 0xFFFF;
+                var i1 = readInput(1) & 0xFFFF;
+
+                var r = i0 - i1;
+                var rH = r >> 16;
+
+                setReg(2, r);
+                regs[rexIndex] = rH;
             }
             break;
 
             // Signed integer multiply
             case instrTable.mul.opCode:
             {
-                var i0 = readInput(0);
-                var i1 = readInput(1);
-                setReg(2, i0 * i1);
+                var i0 = readInput(0) & 0xFFFF;
+                var i1 = readInput(1) & 0xFFFF;
+
+                var r = i0 * i1;
+                var rH = r >> 16;                
+
+                setReg(2, r);
+                regs[rexIndex] = rH;
             }
             break;
 
