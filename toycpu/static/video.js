@@ -126,9 +126,9 @@ VideoDevice.prototype.clearBuffer = function (args, output)
 }
 
 /**
-Draw pixel message handler
+Set pixel message handler
 */
-VideoDevice.prototype.drawPixel = function (args, output)
+VideoDevice.prototype.setPixel = function (args, output)
 {
     var x    = args[2];
     var y    = args[3];
@@ -139,14 +139,36 @@ VideoDevice.prototype.drawPixel = function (args, output)
     var b = ((rgba >>  4) & 0x0F) * 0x11;
     var a = ((rgba >>  0) & 0x0F) * 0x11;
 
-    // TODO: error handling
-
     var startIdx = (y * this.width + x) * 4;
 
     this.activeBuf[startIdx + 0] = r;
     this.activeBuf[startIdx + 1] = g;
     this.activeBuf[startIdx + 2] = b;
     this.activeBuf[startIdx + 3] = a;
+}
+
+/**
+Get pixel message handler
+*/
+VideoDevice.prototype.getPixel = function (args, output)
+{
+    var x = args[2];
+    var y = args[3];
+
+    var startIdx = (y * this.width + x) * 4;
+
+    var r = this.activeBuf[startIdx + 0];
+    var g = this.activeBuf[startIdx + 1];
+    var b = this.activeBuf[startIdx + 2];
+    var a = this.activeBuf[startIdx + 3];
+
+    var rgba = 
+        ((r / 0x11) << 12) + 
+        ((g / 0x11) <<  8) + 
+        ((b / 0x11) <<  4) + 
+        ((a / 0x11) <<  0);
+
+    output.push(rgba);
 }
 
 /**
@@ -305,20 +327,24 @@ VideoDevice.prototype.msgTable = (function ()
     // Clear active buffer
     msgTable[2] = { numArgs: 0, handler: VideoDevice.prototype.clearBuffer };
 
-    // Draw pixel <x> <y> <rgba16>
-    msgTable[3] = { numArgs: 3, handler: VideoDevice.prototype.drawPixel };
+    // Set pixel <x> <y> <rgba16>
+    msgTable[3] = { numArgs: 3, handler: VideoDevice.prototype.setPixel };
+
+    // Get pixel <x> <y>
+    msgTable[4] = { numArgs: 2, handler: VideoDevice.prototype.getPixel };
 
     // Draw line <x0> <y0> <x1> <y1> <rgba16>
-    msgTable[4] = { numArgs: 5, handler: VideoDevice.prototype.drawLine };
+    msgTable[5] = { numArgs: 5, handler: VideoDevice.prototype.drawLine };
 
     // Draw rectangle <x> <y> <w> <h> <rgba16>
-    msgTable[5] = { numArgs: 5, handler: VideoDevice.prototype.drawRect };
+    msgTable[6] = { numArgs: 5, handler: VideoDevice.prototype.drawRect };
 
+    // TODO
     // TODO: Draw triangle
     // TODO
 
     // Draw sprite <sx> <sy> <dx> <dy> <sw> <sh> <dw> <dh>
-    msgTable[7] = { numArgs: 8, handler: VideoDevice.prototype.drawSprite };
+    msgTable[8] = { numArgs: 8, handler: VideoDevice.prototype.drawSprite };
 
     return msgTable;
 })();

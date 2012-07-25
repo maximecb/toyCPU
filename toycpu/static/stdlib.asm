@@ -39,11 +39,11 @@ bus_write 0
 bus_write 2
 ret 0
 
-; @function Draw a pixel in the active video buffer
+; @function Set a pixel in the active video buffer
 ; @arg x-coordinate
 ; @arg y-coordinate
 ; @arg rgba16 color value
-VID_DRAW_PIXEL:
+VID_SET_PIXEL:
 push r0
 push r1
 add rsp, 5, r0
@@ -59,6 +59,20 @@ pop r1
 pop r0
 ret 3
 
+; @function Get a pixel in the active video buffer
+; @arg x-coordinate
+; @arg y-coordinate
+VID_GET_PIXEL:
+bus_write 0
+bus_write 4
+load rsp, 2, r0
+bus_write r0
+load rsp, 1, r0
+bus_write r0
+; Read the pixel value
+bus_read r0
+ret 2
+
 ; @function Draw a line in the active video buffer
 ; @arg x0
 ; @arg y0
@@ -70,7 +84,7 @@ push r0
 push r1
 add rsp, 7, r0
 bus_write 0
-bus_write 4
+bus_write 5
 load r0, 0, r1
 bus_write r1
 load r0,-1, r1
@@ -96,7 +110,7 @@ push r0
 push r1
 add rsp, 7, r0
 bus_write 0
-bus_write 5
+bus_write 6
 load r0, 0, r1
 bus_write r1
 load r0,-1, r1
@@ -125,7 +139,7 @@ push r0
 push r1
 add rsp, 10, r0
 bus_write 0
-bus_write 7
+bus_write 8
 load r0, 0, r1
 bus_write r1
 load r0,-1, r1
