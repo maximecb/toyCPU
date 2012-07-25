@@ -332,9 +332,9 @@ var toyCPU = (function ()
     {
         if (window.localStorage)
         {
-          var srcStr = localStorage.getItem("toyCPU.last");
-          if (srcStr)
-              codeEditor.setValue(srcStr);
+            var srcStr = localStorage.getItem("toyCPU.last");
+            if (srcStr)
+                codeEditor.setValue(srcStr);
         }
     }
 
