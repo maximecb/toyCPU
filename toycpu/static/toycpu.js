@@ -111,13 +111,20 @@ var toyCPU = (function ()
     */
     function init()
     {
+        // set up auto-completions
+        CodeMirror.commands.autocomplete = function(cm)
+        {
+            CodeMirror.simpleHint(cm, CodeMirror.toyCPUHint);
+        }
+        
         // Create the code editor element
         codeEditor = CodeMirror(
             document.getElementById('code-editor'), 
             {
                 theme: 'asm',
                 lineNumbers: true,
-                readOnly: false
+                readOnly: false,
+                extraKeys: {'Ctrl-Space': 'autocomplete'}
             }
         );
 

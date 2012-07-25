@@ -38,49 +38,101 @@
 *
 *****************************************************************************/
 
-CodeMirror.defineMode("cm-asm", function (config, parserConfig) 
+(function ()
 {
-    // State at the start of the document
-    function startState(basecolumn) 
+
+
+    // auto complete
+    var cm_completions = [".const", ".string", ".word", ".zeros"];
+
+    for(var name in instrTable)
     {
+        if (instrTable.hasOwnProperty(name))
+            cm_completions.push(name);
+    }
+
+    cm_completions = cm_completions.concat(regNames);
+
+    // called each time the autocomplete key-combo is hit
+    CodeMirror.toyCPUHint = function (editor)
+    {
+        // Find the token at the cursor
+        var cur = editor.getCursor();
+        var token = editor.getTokenAt(cur);
+
+        // ignore leading whitespace
+        var tindex  = token.string.match(/^\s*/)[0].length
+        var tstring = token.string.substring(tindex);
+        var tsize   = tstring.length;
+
+        // this will hold the possible completions
+        var results = [];
+
+        function maybeAdd(v)
+        {
+            if ( v.substring(0, tsize) === tstring )
+                results.push(v);
+        }
+
+        cm_completions.forEach(maybeAdd);
+
+        // return the completions, adjusting token.start so leading whitespace remains
         return {
-            /*
-            tokenize: jsTokenBase,
-            reAllowed: true,
-            kwAllowed: true,
-            cc: [],
-            lexical: new JSLexical((basecolumn || 0) - indentUnit, 0, "block", false),
-            localVars: parserConfig.localVars,
-            context: parserConfig.localVars && {vars: parserConfig.localVars},
-            indented: 0
-            */
+            list: results,
+            from: { line: cur.line, ch: token.start + tindex },
+            to: { line: cur.line, ch: token.end }
         };
     }
 
-    // Reads one token, mutates the state returns a style string
-    // See CodeMirror stream API
-    function token(stream, state)
+
+
+    CodeMirror.defineMode("cm-asm", function (config, parserConfig) 
     {
-        var tcStream = {
-            peekCh: function () { return stream.peek(); },
-            readCh: function () { return stream.next(); },
-            getPos: function () {}
+        // State at the start of the document
+        function startState(basecolumn) 
+        {
+            return {
+                /*
+                tokenize: jsTokenBase,
+                reAllowed: true,
+                kwAllowed: true,
+                cc: [],
+                lexical: new JSLexical((basecolumn || 0) - indentUnit, 0, "block", false),
+                localVars: parserConfig.localVars,
+                context: parserConfig.localVars && {vars: parserConfig.localVars},
+                indented: 0
+                */
+            };
         }
 
-        var token = asm.getToken(tcStream);
+        // Reads one token, mutates the state returns a style string
+        // See CodeMirror stream API
+        function token(stream, state)
+        {
+            var tcStream = {
+                peekCh: function () { return stream.peek(); },
+                readCh: function () { return stream.next(); },
+                getPos: function () {}
+            }
 
-        if (token.type === 'EOF')
-            return null;
+            var token = asm.getToken(tcStream);
 
-        return token.type;
-    }
+            if (token.type === 'EOF')
+                return null;
 
-    // CodeMirror interface
-    return {
-        startState: startState,
-        token: token
-    };
-});
+            if (token.type === 'LABEL' && cm_completions.indexOf(token.value) === -1)
+                cm_completions.push(token.value);
 
-CodeMirror.defineMIME("text/x-asm", "cm-asm");
+            return token.type;
+        }
 
+        // CodeMirror interface
+        return {
+            startState: startState,
+            token: token
+        };
+    });
+
+    CodeMirror.defineMIME("text/x-asm", "cm-asm");
+
+})();
