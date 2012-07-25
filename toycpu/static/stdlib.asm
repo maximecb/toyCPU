@@ -267,7 +267,55 @@ pop r1
 pop r0
 ret 1
 
-; TODO: CLOCK_MS_ELAPSED
+; @function Check if a delay in milliseconds has elapsed since a
+; @arg pointer to the time value (two 16-bit words)
+; @arg delay in milliseconds (one 16-bit value). The delay value is unsigned.
+CLOCK_MS_ELAPSED:
+; Save registers
+push r1
+push r2
+push r3
+; r1 = t0 value high
+; r0 = t0 value low
+load rsp, 5, r0
+load r0, 1, r1
+load r0, 0, r0
+; r2 = delay value
+load rsp, 4, r2
+; Add delay to t0 value
+add r0, r2, r0
+add r1, rex, r1
+; r3 = ptr to new time value
+sub rsp, 2, rsp
+push rsp
+call CLOCK_TIME_MS
+; r3 = t1 value high
+; r2 = t1 value low
+load rsp, 1, r3
+load rsp, 0, r2
+add rsp, 2, rsp
+; Flip the time value sign bits 
+; to make unsigned comparisons
+add r0, 0x8000, r0
+add r2, 0x8000, r2
+add r1, 0x8000, r1
+add r3, 0x8000, r3
+; Test if t1 > t0 + delay
+jump_gt r3, r1, CLOCK_MS_ELAPSED_TRUE
+jump_lt r3, r1, CLOCK_MS_ELAPSED_FALSE
+jump_gt r2, r0, CLOCK_MS_ELAPSED_TRUE
+jump CLOCK_MS_ELAPSED_FALSE
+CLOCK_MS_ELAPSED_TRUE:
+mov 1, r0
+jump CLOCK_MS_ELAPSED_EXIT
+CLOCK_MS_ELAPSED_FALSE:
+mov 0, r0
+; Exit
+CLOCK_MS_ELAPSED_EXIT:
+pop r3
+pop r2
+pop r1
+ret 2
 
 ;***************************************************************************
 ; Character string utility functions
