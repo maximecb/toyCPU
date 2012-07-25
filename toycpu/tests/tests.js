@@ -3,7 +3,6 @@
 
 module("Basic");
 
-// these test things from plugins.js
 test("Environment is good",function()
 {
     expect(2);
@@ -11,9 +10,14 @@ test("Environment is good",function()
     ok(FONT_DATA, "Font loaded");
 });
 
+test("Not in bizzaro-world",function()
+{
+    expect(1);
+    equal(1, 1, "OK");
+});
+
 module("Fail Example");
 
-// these test things from plugins.js
 test("This should fail",function()
 {
     expect(1);
