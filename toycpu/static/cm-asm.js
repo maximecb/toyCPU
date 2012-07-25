@@ -61,16 +61,16 @@
         var token = editor.getTokenAt(cur);
 
         // ignore leading whitespace
-        var tindex  = token.string.match(/^\s*/)[0].length
+        var tindex = token.string.match(/^\s*/)[0].length
         var tstring = token.string.substring(tindex);
-        var tsize   = tstring.length;
+        var tsize  = tstring.length;
 
         // this will hold the possible completions
         var results = [];
 
         function maybeAdd(v)
         {
-            if ( v.substring(0, tsize) === tstring )
+            if (v.substring(0, tsize) === tstring)
                 results.push(v);
         }
 
