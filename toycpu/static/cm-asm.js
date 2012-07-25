@@ -40,8 +40,6 @@
 
 (function ()
 {
-
-
     // auto complete
     var cm_completions = [".const", ".string", ".word", ".zeros"];
 
@@ -83,8 +81,6 @@
             to: { line: cur.line, ch: token.end }
         };
     }
-
-
 
     CodeMirror.defineMode("cm-asm", function (config, parserConfig) 
     {
