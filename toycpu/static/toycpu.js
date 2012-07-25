@@ -154,6 +154,9 @@ var toyCPU = (function ()
         // Put the library source code in the code view
         libCodeView.setValue(STDLIB_SRC);
 
+        // setup hints for the std lib
+        CodeMirror.toyCPU.setupHints(libCodeView);
+
         // Get the execution control buttons
         runButton = document.getElementById('button-run');
         stopButton = document.getElementById('button-stop');
