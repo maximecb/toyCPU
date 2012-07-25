@@ -43,6 +43,35 @@
     // holds various CodeMirror-specific toyCPU items
     CodeMirror.toyCPU = {};
 
+    var highlighted_line = null;
+
+    CodeMirror.toyCPU.highlightLine = function(line_no, color)
+    {
+        var editor = CodeMirror.toyCPU.codeEditor;
+        var wrapper = editor.getWrapperElement();
+
+        if (line_no)
+            editor.setCursor(--line_no);
+
+        if (!document.querySelector)
+            return null;
+
+        if (line_no === null && highlighted_line)
+        {
+            highlighted_line.style.background = "transparent";
+            highlighted_line = null;
+            return null;
+        }
+
+        var lines = wrapper.querySelector(".CodeMirror-lines").firstChild;
+        var line = lines.childNodes[4].childNodes[line_no];
+
+        line.style.background = color || "red";
+        highlighted_line = line;
+
+        return line;
+    }
+
     // base auto completions (built only on page load)
     // add commands
     var base_completions = [".const", ".string", ".word", ".zeros"];

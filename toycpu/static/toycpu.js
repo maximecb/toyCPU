@@ -131,6 +131,9 @@ var toyCPU = (function ()
             }
         );
 
+        // expose the editor
+        CodeMirror.toyCPU.codeEditor = codeEditor;
+
         // Load last code (if any)
         loadLocal();
 
