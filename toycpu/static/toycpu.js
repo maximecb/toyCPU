@@ -106,6 +106,9 @@ var toyCPU = (function ()
     // Initialize toyCPU after the window is loaded
     window.addEventListener('load', init);
 
+    // Save the current code (if any) before leaving
+    window.addEventListener('beforeunload', saveLocal);
+
     /**
     Called after page load to initialize needed resources
     */
@@ -127,6 +130,9 @@ var toyCPU = (function ()
                 extraKeys: {'Ctrl-Space': 'autocomplete'}
             }
         );
+
+        // Load last code (if any)
+        loadLocal();
 
         // Give the code editor focus
         codeEditor.focus();
@@ -306,6 +312,29 @@ var toyCPU = (function ()
             {
                 add(instrNode, p(text(entry.desc)));
             }
+        }
+    }
+
+    /**
+    Save the code locally so it can be restored
+    */
+    function saveLocal()
+    {
+        var srcStr = codeEditor.getValue();
+        if (window.localStorage)
+            localStorage.setItem("toyCPU.last", srcStr);
+    }
+
+    /**
+    Restore the local backup of the code
+    */
+    function loadLocal()
+    {
+        if (window.localStorage)
+        {
+          var srcStr = localStorage.getItem("toyCPU.last");
+          if (srcStr)
+              codeEditor.setValue(srcStr);
         }
     }
 
