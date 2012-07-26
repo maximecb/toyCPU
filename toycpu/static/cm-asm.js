@@ -81,32 +81,29 @@ var cmASM = (function ()
     var constants = /(\.const\s*)(\w*)(\s*\,)/g;
     var spaces = /^\s*/;
 
-    /*
-    Called on load to initialize the base auto completions
-     */
-    function setupHints(stdLibView)
+
+    // Initialize the base auto completions
+
+    // add instructions
+    for(var name in instrTable)
     {
-        // add instructions
-        for(var name in instrTable)
-        {
-            if (instrTable.hasOwnProperty(name))
-                base_completions.push(name);
-        }
-
-        // add register names
-        base_completions = base_completions.concat(regNames);
-
-        // add std lib labels/consts
-        var stdLibCode = stdLibView.getValue();
-        
-        function addMatches(string, lead, match)
-        {
-            base_completions.push(match);
-        }
-
-        stdLibCode.replace(labels, addMatches);
-        stdLibCode.replace(constants, addMatches);
+        if (instrTable.hasOwnProperty(name))
+            base_completions.push(name);
     }
+
+    // add register names
+    base_completions = base_completions.concat(regNames);
+
+    // add std lib labels/consts
+
+    function addMatches(string, lead, match)
+    {
+        base_completions.push(match);
+    }
+
+    STDLIB_SRC.replace(labels, addMatches);
+    STDLIB_SRC.replace(constants, addMatches);
+
 
     // called each time the autocomplete key-combo is hit
     CodeMirror.toyCPUHint = function (editor)
@@ -201,7 +198,6 @@ var cmASM = (function ()
     CodeMirror.defineMIME("text/x-asm", "cm-asm");
 
     return {
-        setupHints: setupHints,
         highlightLine: highlightLine
     };
 })();
