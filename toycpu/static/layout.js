@@ -41,7 +41,7 @@
 /**
 GUI layout module
 */
-(function () 
+var layout = (function () 
 {
     // Column width
     var COLUMN_WIDTH = 550;
@@ -463,6 +463,93 @@ GUI layout module
         dragMod = undefined;
         dragGhost = undefined;
     }
+
+    /**
+    Show an information/notification box
+    */
+    function infoBox(titleStr, msgStr, infoType)
+    {
+        var borderColor;
+        var titleColor;
+        var backColor;
+        switch (infoType)
+        {
+            case 'error':
+            borderColor = 'rgb(200,0,0)';
+            titleColor  = 'rgb(150,0,0)';
+            backColor   = 'rgb(30 ,0,0)';
+            break;
+
+            case 'warning': 
+            // TODO
+            break;
+
+            case 'notify': 
+            default:
+            // TODO
+            break;
+        }
+
+        // Create the info div
+        var infoDiv = document.createElement('div');
+        infoDiv.className = 'module';
+        infoDiv.style['border-color'] = borderColor;
+
+        // Create the title bar div and its components
+        var titleBar = document.createElement('div');
+        titleBar.className = 'module-title';
+        titleBar.style.background = titleColor;
+        var titleRow = document.createElement('div');
+        titleRow.className = 'module-title-row';
+        var leftCell = document.createElement('div');
+        leftCell.className = 'module-title-left';
+        var rightCell = document.createElement('div');
+        rightCell.className = 'module-title-right';
+        var titleText = document.createTextNode(titleStr);
+        var closeBtn = document.createElement('div');
+        closeBtn.className = 'module-title-button';
+        var closeText = document.createTextNode('[X]');
+
+        // Assemble the title bar
+        titleBar.appendChild(titleRow);
+        titleRow.appendChild(leftCell);
+        titleRow.appendChild(rightCell);
+        leftCell.appendChild(titleText);
+        rightCell.appendChild(closeBtn);
+        closeBtn.appendChild(closeText);
+        
+        // Create the content div
+        var contentDiv = document.createElement('div');
+        contentDiv.appendChild(document.createTextNode(msgStr));
+        contentDiv.className = 'module-content';
+        contentDiv.style.background = backColor;
+        contentDiv.style.padding = '8px';
+        contentDiv.style['font-size'] = '16px';
+        contentDiv.style['font-weight'] = 'bold';
+
+        // Assemble the info box
+        infoDiv.appendChild(titleBar);
+        infoDiv.appendChild(contentDiv);
+
+        // Setup the close button
+        closeBtn.onclick = function ()
+        {
+            infoDiv.parentNode.removeChild(infoDiv);
+        }
+
+        // Add the info box in the info area
+        var infoArea = document.getElementById('info-area');
+        infoArea.appendChild(infoDiv);
+
+        // Scroll at least as high as top of info box
+        var rect = infoDiv.getBoundingClientRect();
+        if (rect.top < 0)
+            document.body.scrollTop += rect.top;
+    }
+
+    return {
+        infoBox: infoBox
+    };
 
 })();
 

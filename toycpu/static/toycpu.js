@@ -377,12 +377,16 @@ var toyCPU = (function ()
             resumeButton.disabled = true;
         }
 
+        // Catch compilation errors
         catch (e)
         {
             if (e.stack)
                 console.error(String(e.stack));
             else
                 console.error(String(e));
+
+            // Show an error box
+            layout.infoBox('Compilation Error', String(e), 'error');
         }
     }
 
@@ -522,6 +526,9 @@ var toyCPU = (function ()
                 console.error(String(e.stack));
             else
                 console.error(String(e));
+
+            // Show an error box
+            layout.infoBox('Run-time Error', String(e), 'error');
         }
 
         // If the VM is now stopped, stop the VM update interval

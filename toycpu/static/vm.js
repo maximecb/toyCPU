@@ -768,7 +768,7 @@ VM.prototype.run = function (maxCycles)
             break;
 
             default:
-            throw Error('unknown opcode: ' + opCode);
+            throw RunError('unknown opcode: ' + opCode);
         }
     }
 }
