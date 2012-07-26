@@ -38,16 +38,16 @@
 *
 *****************************************************************************/
 
-(function ()
+var cmASM = (function ()
 {
-    // holds various CodeMirror-specific toyCPU items
-    CodeMirror.toyCPU = {};
 
     var highlighted_line = null;
 
-    CodeMirror.toyCPU.highlightLine = function(line_no, color)
+    /*
+    Highlights a line in the supplied editor
+     */
+    function highlightLine(editor, line_no, color)
     {
-        var editor = CodeMirror.toyCPU.codeEditor;
         var wrapper = editor.getWrapperElement();
 
         if (line_no)
@@ -84,7 +84,7 @@
     /*
     Called on load to initialize the base auto completions
      */
-    CodeMirror.toyCPU.setupHints = function(stdLibView)
+    function setupHints(stdLibView)
     {
         // add instructions
         for(var name in instrTable)
@@ -200,4 +200,8 @@
 
     CodeMirror.defineMIME("text/x-asm", "cm-asm");
 
+    return {
+        setupHints: setupHints,
+        highlightLine: highlightLine
+    };
 })();

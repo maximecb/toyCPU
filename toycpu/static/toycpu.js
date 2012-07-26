@@ -41,7 +41,7 @@
 /**
 toyCPU graphical interface module
 */
-var toyCPU = (function () 
+var toyCPU = (function ()
 {
     /**
     Graphical view canvas
@@ -131,9 +131,6 @@ var toyCPU = (function ()
             }
         );
 
-        // expose the editor
-        CodeMirror.toyCPU.codeEditor = codeEditor;
-
         // Load last code (if any)
         loadLocal();
 
@@ -158,7 +155,7 @@ var toyCPU = (function ()
         libCodeView.setValue(STDLIB_SRC);
 
         // setup hints for the std lib
-        CodeMirror.toyCPU.setupHints(libCodeView);
+        cmASM.setupHints(libCodeView);
 
         // Get the execution control buttons
         runButton = document.getElementById('button-run');
