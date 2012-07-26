@@ -401,6 +401,54 @@ pop r0
 ret 2
 
 ;***************************************************************************
+; Peudorandom Number Generator (PRNG)
+;***************************************************************************
+
+; Random number generator state/seed (two words: x, y)
+RAND_SEED: 
+.word 1
+.word 1
+
+; @function Returns a 16-bit random number between 0 and 32767 (inclusively)
+; Implements the xorshift algorithm with a period of 2^32-1.
+;
+; Based on a formula by Brad Forschinger:
+; t=(xˆ(x<<a)); x=y; return y=(yˆ(y>>c))ˆ(tˆ(t>>b));
+; (a, b, c) = (5, 3, 1) 
+;
+RAND_INT:
+push r1
+push r2
+push r3
+; r1 = x
+; r0 = y
+load RAND_SEED, 0, r1
+load RAND_SEED, 1, r0
+; r2 = x << 5
+; r2 = x ^ r2
+lshift r1, 5, r2
+xor r1, r2, r2
+; x = y
+store RAND_SEED, 0, r0
+; r3 = r2 >> 3
+; r3 = r2 ^ r3
+rshift r2, 3, r3
+xor r2, r3, r3
+; r2 = y >> 1
+; r2 = y ^ r4
+rshift r0, 1, r2
+xor r0, r2, r2
+; y = t0 ˆ t1
+xor r3, r2, r0
+; y = r0
+store RAND_SEED, 1, r0
+; Exit
+pop r3
+pop r2
+pop r1
+ret 0
+
+;***************************************************************************
 ; User-written code is inserted after this point
 ;***************************************************************************
 

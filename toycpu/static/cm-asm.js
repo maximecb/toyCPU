@@ -38,9 +38,11 @@
 *
 *****************************************************************************/
 
+/**
+CodeMirror assembly support module
+*/
 var cmASM = (function ()
 {
-
     var highlighted_line = null;
 
     /*
@@ -81,7 +83,6 @@ var cmASM = (function ()
     var constants = /(\.const\s*)(\w*)(\s*\,)/g;
     var spaces = /^\s*/;
 
-
     // Initialize the base auto completions
 
     // add instructions
@@ -104,9 +105,8 @@ var cmASM = (function ()
     STDLIB_SRC.replace(labels, addMatches);
     STDLIB_SRC.replace(constants, addMatches);
 
-
     // called each time the autocomplete key-combo is hit
-    CodeMirror.toyCPUHint = function (editor)
+    function toyCPUHint(editor)
     {
         // Find the token at the cursor
         var cur = editor.getCursor();
@@ -198,6 +198,7 @@ var cmASM = (function ()
     CodeMirror.defineMIME("text/x-asm", "cm-asm");
 
     return {
-        highlightLine: highlightLine
+        highlightLine: highlightLine,
+        toyCPUHint: toyCPUHint
     };
 })();

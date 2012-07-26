@@ -117,7 +117,7 @@ var toyCPU = (function ()
         // set up auto-completions
         CodeMirror.commands.autocomplete = function(cm)
         {
-            CodeMirror.simpleHint(cm, CodeMirror.toyCPUHint);
+            CodeMirror.simpleHint(cm, cmASM.toyCPUHint);
         }
         
         // Create the code editor element
