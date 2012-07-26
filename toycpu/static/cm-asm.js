@@ -38,18 +38,75 @@
 *
 *****************************************************************************/
 
-(function ()
+var cmASM = (function ()
 {
-    // auto complete
-    var cm_completions = [".const", ".string", ".word", ".zeros"];
 
-    for(var name in instrTable)
+    var highlighted_line = null;
+
+    /*
+    Highlights a line in the supplied editor
+     */
+    function highlightLine(editor, line_no, color)
     {
-        if (instrTable.hasOwnProperty(name))
-            cm_completions.push(name);
+        var wrapper = editor.getWrapperElement();
+
+        if (line_no)
+            editor.setCursor(--line_no);
+
+        if (!document.querySelector)
+            return null;
+
+        if (line_no === null && highlighted_line)
+        {
+            highlighted_line.style.background = "transparent";
+            highlighted_line = null;
+            return null;
+        }
+
+        var lines = wrapper.querySelector(".CodeMirror-lines").firstChild;
+        var line = lines.childNodes[4].childNodes[line_no];
+
+        line.style.background = color || "red";
+        highlighted_line = line;
+
+        return line;
     }
 
-    cm_completions = cm_completions.concat(regNames);
+    // base auto completions (built only on page load)
+    // add commands
+    var base_completions = [".const", ".string", ".word", ".zeros"];
+
+    // regexen for getting autocompletes from code
+    var labels = /(^|\s*)(\w*)(\:)/gm;
+    var constants = /(\.const\s*)(\w*)(\s*\,)/g;
+    var spaces = /^\s*/;
+
+    /*
+    Called on load to initialize the base auto completions
+     */
+    function setupHints(stdLibView)
+    {
+        // add instructions
+        for(var name in instrTable)
+        {
+            if (instrTable.hasOwnProperty(name))
+                base_completions.push(name);
+        }
+
+        // add register names
+        base_completions = base_completions.concat(regNames);
+
+        // add std lib labels/consts
+        var stdLibCode = stdLibView.getValue();
+        
+        function addMatches(string, lead, match)
+        {
+            base_completions.push(match);
+        }
+
+        stdLibCode.replace(labels, addMatches);
+        stdLibCode.replace(constants, addMatches);
+    }
 
     // called each time the autocomplete key-combo is hit
     CodeMirror.toyCPUHint = function (editor)
@@ -59,9 +116,23 @@
         var token = editor.getTokenAt(cur);
 
         // ignore leading whitespace
-        var tindex = token.string.match(/^\s*/)[0].length
+        var tindex = token.string.match(spaces)[0].length
         var tstring = token.string.substring(tindex);
-        var tsize  = tstring.length;
+        var tsize = tstring.length;
+
+        // current code
+        var code = editor.getValue();
+        // completions for the code as is
+        var code_completions = []
+
+        // build up code_completions
+        function addMatches(string, lead, match)
+        {
+            code_completions.push(match);
+        }
+
+        code.replace(labels, addMatches);
+        code.replace(constants, addMatches);
 
         // this will hold the possible completions
         var results = [];
@@ -72,7 +143,8 @@
                 results.push(v);
         }
 
-        cm_completions.forEach(maybeAdd);
+        code_completions.forEach(maybeAdd);
+        base_completions.forEach(maybeAdd);
 
         // return the completions, adjusting token.start so leading whitespace remains
         return {
@@ -116,9 +188,6 @@
             if (token.type === 'EOF')
                 return null;
 
-            if (token.type === 'LABEL' && cm_completions.indexOf(token.value) === -1)
-                cm_completions.push(token.value);
-
             return token.type;
         }
 
@@ -131,4 +200,8 @@
 
     CodeMirror.defineMIME("text/x-asm", "cm-asm");
 
+    return {
+        setupHints: setupHints,
+        highlightLine: highlightLine
+    };
 })();

@@ -41,7 +41,7 @@
 /**
 toyCPU graphical interface module
 */
-var toyCPU = (function () 
+var toyCPU = (function ()
 {
     /**
     Graphical view canvas
@@ -153,6 +153,9 @@ var toyCPU = (function ()
 
         // Put the library source code in the code view
         libCodeView.setValue(STDLIB_SRC);
+
+        // setup hints for the std lib
+        cmASM.setupHints(libCodeView);
 
         // Get the execution control buttons
         runButton = document.getElementById('button-run');
