@@ -46,10 +46,11 @@ var asm = (function () {
     /**
     @class Source code position
     */
-    function SrcPos(line, col)
+    function SrcPos(line, col, file)
     {
         this.line = line;
         this.col = col;
+        this.file = file;
     }
 
     SrcPos.prototype.toString = function ()
@@ -99,9 +100,10 @@ var asm = (function () {
     /**
     String stream constructor
     */
-    function StrStream(str)
+    function StrStream(str, file)
     {
         this.str = str;
+        this.file = file;
         this.index = 0;
         this.line = 1;
         this.col = 1;
@@ -143,7 +145,7 @@ var asm = (function () {
 
     StrStream.prototype.getPos = function ()
     {
-        return new SrcPos(this.line, this.col);
+        return new SrcPos(this.line, this.col, this.file);
     }
 
     function whitespace(ch)
@@ -543,14 +545,14 @@ var asm = (function () {
     /**
     Parse a string into assembler directives
     */
-    function parseStr(str)
+    function parseStr(str, file)
     {
         assert (
             typeof str === 'string',
             'invalid source string'
         );
 
-        var strStream = new StrStream(str);
+        var strStream = new StrStream(str, file);
 
         var tokens = [];
 
@@ -577,6 +579,9 @@ var asm = (function () {
     {
         // Array of 16-bit machine code words
         var code = [];
+
+        // Source positions for instruction start addresses
+        var instrPos = code.instrPos = [];
 
         // Constant values, by name
         var consts = {};
@@ -750,6 +755,10 @@ var asm = (function () {
                 (opndTypes << 0)
             );
 
+            // Store the line number for this instruction
+            instrPos[code.length] = instr.pos;
+
+            // Write the instruction word
             code.push(instrWord);
 
             // If there are register arguments
@@ -768,6 +777,7 @@ var asm = (function () {
                     }
                 }
 
+                // Write the register word
                 code.push(regWord);
             }
 

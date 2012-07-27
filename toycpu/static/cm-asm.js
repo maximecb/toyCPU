@@ -58,10 +58,14 @@ var cmASM = (function ()
         if (!document.querySelector)
             return null;
 
-        if (line_no === null && highlighted_line)
+        if (highlighted_line)
         {
             highlighted_line.style.background = "transparent";
             highlighted_line = null;
+        }
+
+        if (line_no === null)
+        {
             return null;
         }
 

@@ -81,6 +81,11 @@ var toyCPU = (function ()
     var vm = undefined;
 
     /**
+    Source positions for instructions 
+    */
+    var instrPos = [];
+
+    /**
     Max number of VM updates per second
     */
     var MAX_VM_UPDATE_RATE = 40;
@@ -347,14 +352,14 @@ var toyCPU = (function ()
 
         try 
         {
-            var asmLib = asm.parseStr(STDLIB_SRC);
+            var asmLib = asm.parseStr(STDLIB_SRC, 'stdlib');
 
             // Get the source code
             var srcStr = codeEditor.getValue();
 
             console.log('source length: ' + srcStr.length);
 
-            var asmSrc = asm.parseStr(srcStr);
+            var asmSrc = asm.parseStr(srcStr, 'program');
 
             var asmCode = asmLib.concat(asmSrc);
 
@@ -363,6 +368,9 @@ var toyCPU = (function ()
             var codeStream = asm.assemble(asmCode);
 
             console.log('code stream length: ' + codeStream.length);
+
+            // Store the source positions for instructions
+            instrPos = codeStream.instrPos;
 
             vm.init(codeStream);
 
@@ -573,14 +581,18 @@ var toyCPU = (function ()
     {
         // TODO: don't update if minimized
 
+        // Update the speed and cycle count
         var speedNode = document.getElementById('vm_speed');
         var countNode = document.getElementById('cycle_count');
-
         var speedStr = leftPadStr(String(vmClockSpeed), 8, '\xa0');
         speedNode.childNodes[0].data = speedStr;
-
         var countStr = leftPadStr(String(vm.cycleCount), 12, '\xa0');
         countNode.childNodes[0].data = countStr;
+
+        // Highlight the current instruction's line
+        var pos = instrPos[vm.regs[regIndices.rip]];
+        if (pos !== undefined && pos.file === 'program')
+            cmASM.highlightLine(codeEditor, pos.line, 'rgb(0,100,0)');
 
         updateRegView();
 

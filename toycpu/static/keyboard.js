@@ -51,7 +51,10 @@ Handler called when a key is pressed
 KeyboardDevice.onKeyDown = function (event)
 {
     if (toyCPU.isRunning() === true)
+    {
         event.preventDefault();
+        event.stopPropagation();
+    }
 
     var keyCode = event.keyCode;
     KeyboardDevice.keyMap[keyCode] = true;
@@ -63,7 +66,10 @@ Handler called when a key is released
 KeyboardDevice.onKeyUp = function (event)
 {
     if (toyCPU.isRunning() === true)
+    {
         event.preventDefault();
+        event.stopPropagation();
+    }
 
     var keyCode = event.keyCode;
     KeyboardDevice.keyMap[keyCode] = false;
@@ -87,8 +93,8 @@ KeyboardDevice.prototype.init = function ()
             KeyboardDevice.keyMap[i] = false;
 
         // Register the event handlers
-        document.body.addEventListener('keydown', KeyboardDevice.onKeyDown);
-        document.body.addEventListener('keyup', KeyboardDevice.onKeyUp);
+        document.addEventListener('keydown', KeyboardDevice.onKeyDown);
+        document.addEventListener('keyup', KeyboardDevice.onKeyUp);
     }
 }
 
