@@ -387,6 +387,9 @@ var toyCPU = (function ()
 
             // Show an error box
             layout.infoBox('Compilation Error', String(e), 'error');
+
+            // Highlight the error line
+            cmASM.highlightLine(codeEditor, e.pos.line, 'rgb(100,0,0)');
         }
     }
 
