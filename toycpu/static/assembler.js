@@ -276,6 +276,7 @@ var asm = (function () {
                         case 'v': str += '\v'; break;
                         case 't': str += '\t'; break;
                         case 'b': str += '\b'; break;
+                        case '"': str += '"'; break;
 
                         default:
                         return new Token('ERROR', pos);
