@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 FONT_IN_FILE = 'font/vincent.tga'
-JS_OUT_FILE = 'toycpu/static/font.js'
+JS_OUT_FILE = 'client/font.js'
 
 TGA_HEADER_SIZE = 18
 FONT_CH_WIDTH  = 8

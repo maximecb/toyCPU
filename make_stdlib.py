@@ -2,8 +2,8 @@
 
 import os
 
-ASM_IN_FILE  = 'toycpu/static/stdlib.asm'
-JS_OUT_FILE  = 'toycpu/static/stdlib.js'
+ASM_IN_FILE  = 'client/stdlib.asm'
+JS_OUT_FILE  = 'client/stdlib.js'
 
 # Read the ASM file
 asmFile = open(ASM_IN_FILE, 'r')
