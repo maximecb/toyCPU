@@ -271,11 +271,11 @@ var asm = (function () {
 
                     switch (code)
                     {
-                        case 'r': str += '\\r'; break;
-                        case 'n': str += '\\n'; break;
-                        case 'v': str += '\\v'; break;
-                        case 't': str += '\\t'; break;
-                        case 'b': str += '\\b'; break;
+                        case 'r': str += '\r'; break;
+                        case 'n': str += '\n'; break;
+                        case 'v': str += '\v'; break;
+                        case 't': str += '\t'; break;
+                        case 'b': str += '\b'; break;
 
                         default:
                         return new Token('ERROR', pos);
